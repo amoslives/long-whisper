@@ -1,6 +1,6 @@
 # long-whisper
 
-Transcription pipeline for long audio recordings. Uses faster-whisper with chunking and overlap stitching to handle files of any length.
+Transcription pipeline for long audio recordings with code-switching (multilingual speech). Uses faster-whisper with chunking and overlap stitching to handle files of any length.
 
 ## How to Run
 

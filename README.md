@@ -1,8 +1,8 @@
 # long-whisper
 
-Transcription pipeline for long audio recordings. Splits audio into overlapping chunks, transcribes each with [faster-whisper](https://github.com/SYSTRAN/faster-whisper), then stitches everything into a single timestamped transcript.
+Transcription pipeline for long audio recordings with code-switching (speakers mixing multiple languages mid-sentence). Splits audio into overlapping chunks, transcribes each with [faster-whisper](https://github.com/SYSTRAN/faster-whisper), then stitches everything into a single timestamped transcript.
 
-Built for meeting recordings, lectures, and interviews — works well with multilingual audio where speakers switch languages mid-sentence.
+Built for meetings, lectures, and interviews where participants switch between languages — e.g. Hindi-English (Hinglish), Spanish-English (Spanglish), or any multilingual mix that Whisper supports.
 
 ## How It Works
 
