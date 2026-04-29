@@ -117,3 +117,20 @@ After transcription, the output goes through three cleaning stages:
 1. **Stitch** — sorts all segments by timestamp, deduplicates the overlap zones using similarity matching (>60% text similarity), keeps the version with higher log-probability
 2. **Hallucination filter** — detects runs of 3+ consecutive segments with >50% text similarity (Whisper's characteristic repetition artifact) and collapses each run to the single best segment
 3. **Fragment merge** — joins adjacent segments shorter than 3 seconds (with gaps under 1.5s) into longer, more readable chunks
+
+## Acknowledgments
+
+This project is built on top of several open-source projects:
+
+| Project | License | Role |
+|---------|---------|------|
+| [faster-whisper](https://github.com/SYSTRAN/faster-whisper) | MIT | Core transcription engine (CTranslate2-based Whisper inference) |
+| [OpenAI Whisper](https://github.com/openai/whisper) | MIT | Original model architecture and pretrained weights |
+| [CTranslate2](https://github.com/OpenNMT/CTranslate2) | MIT | Optimized inference backend used by faster-whisper |
+| [Silero VAD](https://github.com/snakers4/silero-vad) | MIT | Voice activity detection for filtering silence |
+| [PyTorch](https://github.com/pytorch/pytorch) | BSD-3-Clause | ML framework |
+| [FFmpeg](https://ffmpeg.org/) | LGPL-2.1+ / GPL-2.0+ | Audio splitting and format conversion (invoked as external tool) |
+
+## License
+
+[MIT](LICENSE)
