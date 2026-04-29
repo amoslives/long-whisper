@@ -1,13 +1,13 @@
-# Hinglish Transcription Pipeline
+# long-whisper
 
-Transcription pipeline for long Hinglish (Hindi+English) audio recordings. Splits audio into overlapping chunks, transcribes each with [faster-whisper](https://github.com/SYSTRAN/faster-whisper) `large-v3-turbo`, then stitches everything into a single timestamped transcript.
+Transcription pipeline for long audio recordings. Splits audio into overlapping chunks, transcribes each with [faster-whisper](https://github.com/SYSTRAN/faster-whisper), then stitches everything into a single timestamped transcript.
 
-Built for meeting recordings where speakers switch between Hindi and English mid-sentence.
+Built for meeting recordings, lectures, and interviews — works well with multilingual audio where speakers switch languages mid-sentence.
 
 ## How It Works
 
 1. **Chunk** — splits the audio into 10-minute segments with 30-second overlap using `ffmpeg`
-2. **Transcribe** — runs each chunk through faster-whisper on GPU (`language="hi"` covers Hinglish)
+2. **Transcribe** — runs each chunk through faster-whisper on GPU
 3. **Stitch** — merges all segments, deduplicating the overlap zones by picking the highest-confidence version
 4. **Clean** — removes Whisper hallucination artifacts (repetitive gibberish) and merges word-level fragments into readable sentences
 
@@ -60,7 +60,7 @@ Output is a timestamped text file, one segment per line:
 |----------|---------|-------------|
 | `audio` | *(required)* | Path to the input audio file (mp3, wav, m4a, flac, etc. — anything ffmpeg can read) |
 | `-o`, `--output` | `<filename>_transcript.txt` | Path for the output transcript file. If not specified, derived from the input filename |
-| `--model` | `large-v3` | Whisper model to use. Options: `large-v3` (best quality for Hinglish), `large-v3-turbo` (2-3x faster, romanized output only), `medium`, `small`, `base`, `tiny` |
+| `--model` | `large-v3` | Whisper model to use. `large-v3` is recommended — most accurate, produces native-script output (e.g. Devanagari for Hindi), but slower. `large-v3-turbo` is 2-3x faster with romanized output only, at the cost of some accuracy. Other options: `medium`, `small`, `base`, `tiny` |
 | `--device-index` | `1` | CUDA GPU index. Use `0` for the first GPU, `1` for the second, etc. |
 | `--chunk-size` | `600` | Duration of each audio chunk in seconds. Larger chunks use more VRAM but give Whisper more context. 600s (10 min) is a good balance for 16GB GPUs |
 | `--overlap` | `30` | Overlap between consecutive chunks in seconds. The stitcher deduplicates this zone. 30s gives enough margin for clean joins without wasting compute |
@@ -77,7 +77,7 @@ python transcribe_pipeline.py meeting.mp3 -o notes/apr28_meeting.txt
 # Use the first GPU instead of the second
 python transcribe_pipeline.py meeting.mp3 --device-index 0
 
-# Use the faster turbo variant (romanized output, no Devanagari)
+# Use the faster turbo variant (2-3x faster, romanized output only)
 python transcribe_pipeline.py meeting.mp3 --model large-v3-turbo
 
 # Shorter chunks for a GPU with less VRAM (e.g. 8GB)
@@ -96,7 +96,7 @@ These are set in the script source (`TRANSCRIBE_OPTS` and `DEFAULTS`) and not ex
 
 | Parameter | Value | Purpose |
 |-----------|-------|---------|
-| `language` | `"hi"` | Whisper language hint — Hindi covers Hinglish (Hindi+English) |
+| `language` | `"hi"` | Whisper language hint — set to match your audio's primary language |
 | `compute_type` | `"float16"` | GPU precision — float16 is fastest on consumer/workstation GPUs |
 | `beam_size` | `5` | Beam search width for decoding |
 | `repetition_penalty` | `1.2` | Penalizes repeated tokens to reduce Whisper hallucinations |

@@ -1,6 +1,6 @@
-# Hinglish ASR Transcription Pipeline
+# long-whisper
 
-Transcription pipeline for long Hinglish (Hindi+English) meeting recordings. Uses faster-whisper with chunking and overlap stitching to handle files of any length.
+Transcription pipeline for long audio recordings. Uses faster-whisper with chunking and overlap stitching to handle files of any length.
 
 ## How to Run
 
@@ -32,9 +32,9 @@ python transcribe_pipeline.py recording.mp3 --device-index 0
 | `--chunk-size` | `600` (10 min) | Audio chunk duration in seconds |
 | `--overlap` | `30` | Overlap between chunks in seconds for dedup stitching |
 | `--device-index` | `1` | CUDA GPU index (0 or 1) |
-| Language | `hi` (Hindi) | Hardcoded in `TRANSCRIBE_OPTS`; covers Hinglish |
+| Language | `hi` (Hindi) | Hardcoded in `TRANSCRIBE_OPTS`; change to match your audio's primary language |
 | Compute type | `float16` | Hardcoded in `DEFAULTS` |
-| `prompt.txt` | Loaded at startup | Domain-specific Hinglish text to prime the model; copy `prompt.example.txt` to `prompt.txt` and customize |
+| `prompt.txt` | Loaded at startup | Domain-specific text to prime the model with vocabulary; copy `prompt.example.txt` to `prompt.txt` and customize |
 
 ## System Requirements
 
