@@ -1,0 +1,39 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Audio files
+*.mp3
+*.wav
+*.m4a
+*.flac
+*.ogg
+
+# Pipeline artifacts
+_chunks/
+*_transcript_*.txt
+*_transcript.txt
+
+# Cache
+.cache/
+*.cache
+
+# Domain-specific prompt (contains internal context)
+prompt.txt
+
+# Temp files
+*.tmp
+*.swp
+*~
+
+# Model cache (downloaded from HuggingFace)
+# ~/.cache/huggingface/ is the default location
+
+# OS
+.DS_Store
+Thumbs.db
