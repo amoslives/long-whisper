@@ -23,8 +23,10 @@ _chunks/
 .cache/
 *.cache
 
-# Domain-specific prompt (contains internal context)
+# Domain-specific prompts (contain internal context / IP)
 prompt.txt
+prompt_*.txt
+!prompt.example.txt
 
 # Temp files
 *.tmp
