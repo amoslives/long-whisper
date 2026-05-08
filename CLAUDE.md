@@ -32,9 +32,11 @@ python transcribe_pipeline.py recording.mp3 --device-index 0
 | `--chunk-size` | `600` (10 min) | Audio chunk duration in seconds |
 | `--overlap` | `30` | Overlap between chunks in seconds for dedup stitching |
 | `--device-index` | `1` | CUDA GPU index (0 or 1) |
-| Language | `hi` (Hindi) | Hardcoded in `TRANSCRIBE_OPTS`; change to match your audio's primary language |
+| `--lang` | `hi` | Language code; also selects `prompt_<lang>.txt` if it exists |
 | Compute type | `float16` | Hardcoded in `DEFAULTS` |
-| `prompt.txt` | Loaded at startup | Domain-specific text to prime the model with vocabulary; copy `prompt.example.txt` to `prompt.txt` and customize |
+| `prompt_hi.txt` | Hinglish prompt | Domain vocabulary for Hindi/Hinglish recordings |
+| `prompt_en.txt` | English prompt | Domain vocabulary for English recordings |
+| `prompt.example.txt` | Template | Copy to `prompt_<lang>.txt` and customize for new languages |
 
 ## System Requirements
 

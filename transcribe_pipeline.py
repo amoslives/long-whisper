@@ -24,16 +24,19 @@ from difflib import SequenceMatcher
 from faster_whisper import WhisperModel
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-_prompt_file = os.path.join(SCRIPT_DIR, "prompt.txt")
-if os.path.exists(_prompt_file):
-    with open(_prompt_file, encoding="utf-8") as _f:
-        INITIAL_PROMPT = _f.read().strip()
-else:
-    INITIAL_PROMPT = None
+
+
+def _load_prompt(lang):
+    prompt_file = os.path.join(SCRIPT_DIR, f"prompt_{lang}.txt")
+    if os.path.exists(prompt_file):
+        with open(prompt_file, encoding="utf-8") as f:
+            return f.read().strip() or None
+    return None
+
 
 TRANSCRIBE_OPTS = dict(
-    language="hi",
-    initial_prompt=INITIAL_PROMPT,
+    language=None,
+    initial_prompt=None,
     beam_size=5,
     repetition_penalty=1.2,
     no_repeat_ngram_size=5,
@@ -224,6 +227,7 @@ def main():
     p = argparse.ArgumentParser(description="Transcribe long audio with Whisper large-v3")
     p.add_argument("audio", help="Path to audio file")
     p.add_argument("-o", "--output", help="Output transcript path (default: <name>_transcript.txt)")
+    p.add_argument("--lang", default="hi", help="Language code (default: hi). Loads prompt_<lang>.txt if it exists")
     p.add_argument("--model", default=DEFAULTS["model"], help=f"Whisper model (default: {DEFAULTS['model']})")
     p.add_argument("--device-index", type=int, default=DEFAULTS["device_index"], help="CUDA device index")
     p.add_argument("--chunk-size", type=int, default=DEFAULTS["chunk_size"], help=f"Chunk duration in seconds (default: {DEFAULTS['chunk_size']})")
@@ -236,12 +240,18 @@ def main():
 
     output = args.output or os.path.splitext(os.path.basename(args.audio))[0] + "_transcript.txt"
 
+    TRANSCRIBE_OPTS["language"] = args.lang
+    TRANSCRIBE_OPTS["initial_prompt"] = _load_prompt(args.lang)
+
     duration = get_duration(args.audio)
     n_chunks = max(1, int((duration - 1) // args.chunk_size) + 1)
 
+    prompt_status = f"prompt_{args.lang}.txt" if TRANSCRIBE_OPTS["initial_prompt"] else "none"
     print(f"Audio    : {args.audio}")
     print(f"Duration : {fmt_ts(duration)}")
     print(f"Model    : {args.model}")
+    print(f"Language : {args.lang}")
+    print(f"Prompt   : {prompt_status}")
     print(f"Chunks   : {n_chunks} x {args.chunk_size}s (overlap {args.overlap}s)")
     print(f"Output   : {output}")
 
