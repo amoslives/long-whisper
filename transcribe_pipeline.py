@@ -238,7 +238,7 @@ def main():
         print(f"Error: {args.audio} not found", file=sys.stderr)
         sys.exit(1)
 
-    output = args.output or os.path.splitext(os.path.basename(args.audio))[0] + "_transcript.txt"
+    output = args.output or os.path.splitext(args.audio)[0] + "_transcript.txt"
 
     TRANSCRIBE_OPTS["language"] = args.lang
     TRANSCRIBE_OPTS["initial_prompt"] = _load_prompt(args.lang)
